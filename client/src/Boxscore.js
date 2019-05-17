@@ -45,8 +45,8 @@ const Boxscore = props => {
             {away_period_scores.map((val, i) => (
               <BoxscoreCell key={i}>{val}</BoxscoreCell>
             ))}
-            <BoxscoreCell>{away_batter_totals.hits}</BoxscoreCell>
             <BoxscoreCell>{away_batter_totals.rbi}</BoxscoreCell>
+            <BoxscoreCell>{away_batter_totals.hits}</BoxscoreCell>
             <BoxscoreCell>{away_errors}</BoxscoreCell>
           </BoxscoreRow>
           {/* Home Team Row*/}
@@ -55,20 +55,20 @@ const Boxscore = props => {
             {home_period_scores.map((val, i) => (
               <BoxscoreCell key={i}>{val}</BoxscoreCell>
             ))}
-            <BoxscoreCell>{home_batter_totals.hits}</BoxscoreCell>
             <BoxscoreCell>{home_batter_totals.rbi}</BoxscoreCell>
+            <BoxscoreCell>{home_batter_totals.hits}</BoxscoreCell>
             <BoxscoreCell>{home_errors}</BoxscoreCell>
           </BoxscoreRow>
           <BoxscoreTeamInfoRow>
             <BoxscoreCell away btmLeft>
-              {away_team.last_name}
+              {away_team.last_name.toUpperCase()}
             </BoxscoreCell>
             {/* place for inning info if game isn't completed */}
             <BoxscoreCell>
               {event_information.status === 'completed' ? 'FINAL' : ''}
             </BoxscoreCell>
             <BoxscoreCell home btmRight>
-              {home_team.last_name}
+              {home_team.last_name.toUpperCase()}
             </BoxscoreCell>
           </BoxscoreTeamInfoRow>
         </BoxscoreContainer>
@@ -122,13 +122,13 @@ const Boxscore = props => {
           </BoxscoreRow>
           <BoxscoreTeamInfoRow>
             <BoxscoreCell away btmLeft>
-              {away_team.last_name}
+              {away_team.last_name.toUpperCase()}
             </BoxscoreCell>
             <BoxscoreCell>
               {event_information.status === 'completed' ? 'FINAL' : ''}
             </BoxscoreCell>
             <BoxscoreCell home btmRight>
-              {home_team.last_name}
+              {home_team.last_name.toUpperCase()}
             </BoxscoreCell>
           </BoxscoreTeamInfoRow>
         </BoxscoreContainer>
