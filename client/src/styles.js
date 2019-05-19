@@ -32,7 +32,10 @@ export const BoxscoreContainer = styled.div`
 
 export const BoxscoreRow = styled.div`
   display: grid;
-  grid-template-columns: 2fr repeat(${props => (props.nba ? '5' : '12')}, 1fr);
+  grid-template-columns: 2fr repeat(
+      ${props => (props.league === 'nba' ? '5' : '12')},
+      1fr
+    );
   width: 100%;
   height: 100%;
 `;

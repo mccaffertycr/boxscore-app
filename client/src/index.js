@@ -3,14 +3,11 @@ import ReactDOM from 'react-dom';
 
 import { GlobalStyle } from './styles';
 import Boxscore from './Boxscore';
-import BoxscoreData from './BoxscoreData';
-
-const BoxscoreWithData = BoxscoreData(Boxscore);
 
 ReactDOM.render(
   <>
-    <BoxscoreWithData league="MLB" />
-    <BoxscoreWithData league="NBA" />
+    <Boxscore league="mlb" />
+    <Boxscore league="nba" />
     <GlobalStyle />
   </>,
   document.getElementById('root')

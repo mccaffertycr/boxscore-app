@@ -1,4 +1,5 @@
 import React from 'react';
+import useGameData from './useGameData';
 import {
   BoxscoreContainer,
   BoxscoreRow,
@@ -7,30 +8,24 @@ import {
   BoxscoreCell,
 } from './styles';
 
-const Boxscore = props => {
-  // MLB Boxscore
-  if (props.mlbData) {
-    const headerRowValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 'R', 'H', 'E'];
+const Boxscore = ({ league }) => {
+  const { gameData, headerRowVals, isLoading } = useGameData(league);
+  if (!isLoading) {
     const {
       event_information,
       away_team,
       away_period_scores,
-      away_batter_totals,
-      away_errors,
       home_team,
       home_period_scores,
-      home_batter_totals,
-      home_errors,
-    } = props.mlbData;
-
+    } = gameData.data;
     if (away_team) {
       return (
         <BoxscoreContainer>
           {/* Header Row */}
-          <BoxscoreHeaderRow>
+          <BoxscoreHeaderRow league={league}>
             <BoxscoreCell topLeft />
-            {headerRowValues.map((val, i) =>
-              i === headerRowValues.length - 1 ? (
+            {headerRowVals.map((val, i) =>
+              i === headerRowVals.length - 1 ? (
                 <BoxscoreCell key={i} topRight>
                   {val}
                 </BoxscoreCell>
@@ -40,24 +35,44 @@ const Boxscore = props => {
             )}
           </BoxscoreHeaderRow>
           {/* Away Team Row*/}
-          <BoxscoreRow>
+          <BoxscoreRow league={league}>
             <BoxscoreCell>{away_team.abbreviation}</BoxscoreCell>
             {away_period_scores.map((val, i) => (
               <BoxscoreCell key={i}>{val}</BoxscoreCell>
             ))}
-            <BoxscoreCell>{away_batter_totals.rbi}</BoxscoreCell>
-            <BoxscoreCell>{away_batter_totals.hits}</BoxscoreCell>
-            <BoxscoreCell>{away_errors}</BoxscoreCell>
+            {gameData.data.away_batter_totals ? (
+              <>
+                <BoxscoreCell>
+                  {gameData.data.away_batter_totals.rbi}
+                </BoxscoreCell>
+                <BoxscoreCell>
+                  {gameData.data.away_batter_totals.hits}
+                </BoxscoreCell>
+                <BoxscoreCell>{gameData.data.away_errors}</BoxscoreCell>
+              </>
+            ) : (
+              <BoxscoreCell>{gameData.data.away_totals.points}</BoxscoreCell>
+            )}
           </BoxscoreRow>
           {/* Home Team Row*/}
-          <BoxscoreRow>
+          <BoxscoreRow league={league}>
             <BoxscoreCell>{home_team.abbreviation}</BoxscoreCell>
             {home_period_scores.map((val, i) => (
               <BoxscoreCell key={i}>{val}</BoxscoreCell>
             ))}
-            <BoxscoreCell>{home_batter_totals.rbi}</BoxscoreCell>
-            <BoxscoreCell>{home_batter_totals.hits}</BoxscoreCell>
-            <BoxscoreCell>{home_errors}</BoxscoreCell>
+            {gameData.data.away_batter_totals ? (
+              <>
+                <BoxscoreCell>
+                  {gameData.data.home_batter_totals.rbi}
+                </BoxscoreCell>
+                <BoxscoreCell>
+                  {gameData.data.home_batter_totals.hits}
+                </BoxscoreCell>
+                <BoxscoreCell>{gameData.data.home_errors}</BoxscoreCell>
+              </>
+            ) : (
+              <BoxscoreCell>{gameData.data.home_totals.points}</BoxscoreCell>
+            )}
           </BoxscoreRow>
           <BoxscoreTeamInfoRow>
             <BoxscoreCell away btmLeft>
@@ -73,67 +88,7 @@ const Boxscore = props => {
           </BoxscoreTeamInfoRow>
         </BoxscoreContainer>
       );
-    }
-  }
-  // NBA Boxscore
-  if (props.nbaData) {
-    const headerRowValues = [1, 2, 3, 4, 'T'];
-    const {
-      event_information,
-      away_team,
-      away_period_scores,
-      away_totals,
-      home_team,
-      home_period_scores,
-      home_totals,
-    } = props.nbaData;
-
-    if (away_team) {
-      return (
-        <BoxscoreContainer>
-          {/* Header Row */}
-          <BoxscoreHeaderRow nba>
-            <BoxscoreCell topLeft />
-            {headerRowValues.map((val, i) =>
-              i === headerRowValues.length - 1 ? (
-                <BoxscoreCell key={i} topRight>
-                  {val}
-                </BoxscoreCell>
-              ) : (
-                <BoxscoreCell key={i}>{val}</BoxscoreCell>
-              )
-            )}
-          </BoxscoreHeaderRow>
-          {/* Away Team Row */}
-          <BoxscoreRow nba>
-            <BoxscoreCell>{away_team.abbreviation}</BoxscoreCell>
-            {away_period_scores.map((val, i) => (
-              <BoxscoreCell key={i}>{val}</BoxscoreCell>
-            ))}
-            <BoxscoreCell>{away_totals.points}</BoxscoreCell>
-          </BoxscoreRow>
-          {/* Home Team Row */}
-          <BoxscoreRow nba>
-            <BoxscoreCell>{home_team.abbreviation}</BoxscoreCell>
-            {home_period_scores.map((val, i) => (
-              <BoxscoreCell key={i}>{val}</BoxscoreCell>
-            ))}
-            <BoxscoreCell>{home_totals.points}</BoxscoreCell>
-          </BoxscoreRow>
-          <BoxscoreTeamInfoRow>
-            <BoxscoreCell away btmLeft>
-              {away_team.last_name.toUpperCase()}
-            </BoxscoreCell>
-            <BoxscoreCell>
-              {event_information.status === 'completed' ? 'FINAL' : ''}
-            </BoxscoreCell>
-            <BoxscoreCell home btmRight>
-              {home_team.last_name.toUpperCase()}
-            </BoxscoreCell>
-          </BoxscoreTeamInfoRow>
-        </BoxscoreContainer>
-      );
-    }
+    } else return <h1>loading...</h1>;
   }
   return null;
 };
